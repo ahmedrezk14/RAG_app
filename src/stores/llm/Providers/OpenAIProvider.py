@@ -1,10 +1,6 @@
-from email import message
-from encodings.punycode import T
-
 from ..LLMInterface import LLMInterface
 from ..LLMEnums import OpenAIEnums
 from openai import OpenAI
-
 import logging 
 
 class OpenAIProvider(LLMInterface):
@@ -67,7 +63,7 @@ class OpenAIProvider(LLMInterface):
 
         return response.choices[0].message["content"]
 
-    def embed_text(self, text: str, document_type=None):
+    def embed_text(self, text: str, document_type:str=None):
         if not self.client:
             self.logger.error("OpenAI client was not set")
             return None
