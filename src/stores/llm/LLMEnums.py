@@ -2,7 +2,7 @@ from enum import Enum
 
 class LLMEnums(Enum):
 
-    OPENAI="OPANAI"
+    OPENAI="OPENAI"
     COHERE="COHERE"
 
 class OpenAIEnums(Enum):

@@ -21,7 +21,7 @@ class CoHereProvider(LLMInterface):
         self.embedding_model_id=None
         self.embedding_size=None
 
-        self.client=cohere(api_key=self.api_key)
+        self.client=cohere.Client(api_key=self.api_key)
 
         self.logger=logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ class CoHereProvider(LLMInterface):
             self.logger.error("Error while generating text with CoHere")
             return None
 
-        return response.text
+        return response.message.content[0].text
 
     def embed_text(self, text: str, document_type:str=None):
         if not self.client:
@@ -81,7 +81,8 @@ class CoHereProvider(LLMInterface):
         if not response or not response.embeddings or not response.embeddings.float:
             self.logger.error("Error while embedding text with CoHere")
             return None
-
+        
+        # print("Model:", self.embedding_model_id, "| Configured size:", self.embedding_size)
         return response.embeddings.float[0]
         
     def construct_prompt(self, prompt:str, role:str):
