@@ -3,7 +3,7 @@ from qdrant_client import models, QdrantClient
 from regex import F
 from ..VectorDBInterface import VectorDBInterface
 from ..VectorDBEnums import DistanceMethodEnums
-from models.db_schemes.DataChunk import RetrievedDocument
+from models.db_schemes import RetrievedDocument
 import logging
 from typing import List
 
