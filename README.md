@@ -1,151 +1,171 @@
-# mini-rag
+# RAG App
 
-This is a minimal implementation of the RAG model for question answering.
+A document-based Retrieval-Augmented Generation (RAG) application built with Python, FastAPI, and PostgreSQL.
 
-## The Course
+The project focuses on building a practical RAG pipeline that enables users to upload documents, process and store their content, retrieve relevant information using semantic search, and generate context-aware answers using Large Language Models (LLMs).
 
-This is an educational project where all of the codes where explained (step by step) via a set of `Arabic` youtube videos. Please check the list:
+## Current Implementation
 
-| # | Title                                    | Link                                                                                                 | Codes                                              |
-|---|------------------------------------------|------------------------------------------------------------------------------------------------------|----------------------------------------------------|
-| 1 | About the Course ماذا ولمـــاذا          | [Video](https://www.youtube.com/watch?v=Vv6e2Rb1Q6w&list=PLvLvlVqNQGHCUR2p0b8a0QpVjDUg50wQj)         | NA                                                 |
-| 2 | What will we build ماذا سنبنى في المشروع | [Video](https://www.youtube.com/watch?v=_l5S5CdxE-Q&list=PLvLvlVqNQGHCUR2p0b8a0QpVjDUg50wQj&index=2) | NA                                                 |
-| 3 | Setup your tools الأدوات الأساسية        | [Video](https://www.youtube.com/watch?v=VSFbkFRAT4w&list=PLvLvlVqNQGHCUR2p0b8a0QpVjDUg50wQj&index=3) | NA                                                 |
-| 4 | Project Architecture                     | [Video](https://www.youtube.com/watch?v=Ei_nBwBbFUQ&list=PLvLvlVqNQGHCUR2p0b8a0QpVjDUg50wQj&index=4) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-001) |
-| 5 | Welcome to FastAPI                       | [Video](https://www.youtube.com/watch?v=cpOuCdzN_Mo&list=PLvLvlVqNQGHCUR2p0b8a0QpVjDUg50wQj&index=5) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-002) |
-| 6 | Nested Routes + Env Values               | [Video](https://www.youtube.com/watch?v=CrR2Bz2Y7Hw&list=PLvLvlVqNQGHCUR2p0b8a0QpVjDUg50wQj&index=6) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-003) |
-| 7 | Uploading a File                         | [Video](https://www.youtube.com/watch?v=5alMKCbFqWs&list=PLvLvlVqNQGHCUR2p0b8a0QpVjDUg50wQj&index=7) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-004) |
-| 8 | File Processing                         | [Video](https://www.youtube.com/watch?v=gQgr2iwtSBw) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-005) |
-| 9 | Docker - MongoDB - Motor                         | [Video](https://www.youtube.com/watch?v=2NOKWm0xJAk) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-006) |
-| 10 | Mongo Schemes and Models                        | [Video](https://www.youtube.com/watch?v=zgcnnMJXXV8) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-007) |
-| 11 | Mongo Indexing                        | [Video](https://www.youtube.com/watch?v=iO8FAmUVcjE) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-008) |
-| 12 | Data Pipeline Enhancements                        | [Video](https://www.youtube.com/watch?v=4x1DuezZBDU) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-008) |
-| 13 | Checkpoint-1                        | [Video](https://www.youtube.com/watch?v=7xIsZkCisPk) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-008) |
-| 14 | LLM Factory                        | [Video](https://www.youtube.com/watch?v=5TKRIFtIQAY) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-008) |
-| 15 | Vector DB Factory                        | [Video](https://www.youtube.com/watch?v=JtS9UkvF_10) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-009) |
-| 16 | Semantic Search                       | [Video](https://www.youtube.com/watch?v=V3swQKokJW8) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-010) |
-| 17 | Augmented Answers                       | [Video](https://www.youtube.com/watch?v=1Wx8BoM5pLU) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-011) |
-| 18 | Checkpoint-1 + Fix Issues                       | [Video](https://youtu.be/6zG4Idxldvg) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-012) |
-| 19 | Ollama Local LLM Server                       | [Video](https://youtu.be/-epZ1hAAtrs) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-012) |
-| 20 | From Mongo to Postgres + SQLAlchemy & Alembic                       | [Video](https://www.youtube.com/watch?v=BVOq7Ek2Up0) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-013) |
-| 21 | The way to PgVector                       | [Video](https://www.youtube.com/watch?v=g99yq5zlYAE) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-014) |
-| 22 | App Deployments 1/2                       | [Video](https://www.youtube.com/watch?v=7QRPnAbVssg) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-015) |
-| 22 | App Deployments 2/2                       | [Video](https://www.youtube.com/watch?v=qJ5Hdyc4hDc) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-015) |
-| 24 | Celery Workers 1/2                       | [Video](https://www.youtube.com/watch?v=pX-iWWT2TJo) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-016) |
-| 25 | Celery Workers 2/2                       | [Video](https://www.youtube.com/watch?v=SZ5Aznjf8Kc) | [branch](https://github.com/bakrianoo/mini-rag/tree/tut-017) |
+The current implementation covers the core components of a RAG application:
 
+- **REST API:** Building application endpoints using FastAPI.
+- **Document Upload:** Uploading documents through the API.
+- **File Processing:** Extracting and processing document content.
+- **Data Pipeline:** Organizing document processing and indexing workflows.
+- **Database Integration:** Working with MongoDB and migrating to PostgreSQL.
+- **Database Models:** Managing database schemas using SQLAlchemy.
+- **Database Migrations:** Handling schema changes with Alembic.
+- **LLM Factory:** Creating a flexible interface for integrating different LLM providers.
+- **Vector DB Factory:** Structuring vector database integrations.
+- **Semantic Search:** Finding relevant document content using vector similarity.
+- **Augmented Generation:** Generating context-aware answers using retrieved document information.
+- **PgVector:** Storing and searching vector embeddings directly in PostgreSQL.
 
+## Tech Stack
 
+| Technology | Purpose |
+|---|---|
+| Python 3.10 | Backend development |
+| FastAPI | REST API |
+| PostgreSQL | Relational database |
+| PgVector | Vector storage and similarity search |
+| SQLAlchemy | Database ORM |
+| Alembic | Database migrations |
+| MongoDB | Previous database implementation |
+| Docker | Containerized services |
+| Ollama | Local LLM integration |
 
-## Requirements
+## Getting Started
+
+### Prerequisites
 
 - Python 3.10
+- Miniconda or another Python environment manager
+- Docker and Docker Compose
+- Required API credentials (depending on the selected LLM provider)
 
-#### Install Dependencies
+### 1. Install System Dependencies
 
 ```bash
 sudo apt update
 sudo apt install libpq-dev gcc python3-dev
 ```
 
-#### Install Python using MiniConda
+### 2. Create a Python Environment
 
-1) Download and install MiniConda from [here](https://docs.anaconda.com/free/miniconda/#quick-command-line-install)
-2) Create a new environment using the following command:
-```bash
-$ conda create -n mini-rag python=3.10
-```
-3) Activate the environment:
-```bash
-$ conda activate mini-rag
-```
-
-### (Optional) Setup you command line interface for better readability
+Using Conda:
 
 ```bash
-export PS1="\[\033[01;32m\]\u@\h:\w\n\[\033[00m\]\$ "
+conda create -n rag-app python=3.10
+conda activate rag-app
 ```
 
-### (Optional) Run Ollama Local LLM Server using Colab + Ngrok
-
-- Check the [notebook](https://colab.research.google.com/drive/1KNi3-9KtP-k-93T3wRcmRe37mRmGhL9p?usp=sharing) + [Video](https://youtu.be/-epZ1hAAtrs)
-
-## Installation
-
-### Install the required packages
+### 3. Install Dependencies
 
 ```bash
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-### Setup the environment variables
+### 4. Configure Environment Variables
+
+Create your environment file:
 
 ```bash
-$ cp .env.example .env
+cp .env.example .env
 ```
 
-### Run Alembic Migration
+Update `.env` with your required configuration and credentials, such as your API keys and database connection settings.
+
+### 5. Start Docker Services
+
+Navigate to the Docker directory:
 
 ```bash
-$ alembic upgrade head
+cd docker
+cp .env.example .env
 ```
 
-Set your environment variables in the `.env` file. Like `OPENAI_API_KEY` value.
-
-## Run Docker Compose Services
+Configure the Docker environment variables, then start the services:
 
 ```bash
-$ cd docker
-$ cp .env.example .env
+docker compose up -d
 ```
 
-- update `.env` with your credentials
+### 6. Run Database Migrations
 
-
+Return to the project root directory:
 
 ```bash
-$ cd docker
-$ sudo docker compose up -d
+cd ..
 ```
 
-## Access Services
-
-- **FastAPI**: http://localhost:8000
-- **Flower Dashboard**: http://localhost:5555 (admin/password from env)
-- **Grafana**: http://localhost:3000
-- **Prometheus**: http://localhost:9090
-
-## Run the FastAPI server (Development Mode)
+Apply database migrations:
 
 ```bash
-$ uvicorn main:app --reload --host 0.0.0.0 --port 5000
+alembic upgrade head
 ```
 
-# Celery (Development Mode)
+### 7. Run the Application
 
-For development, you can run Celery services manually instead of using Docker:
-
-To Run the **Celery worker**, you need to run the following command in a separate terminal:
+Start the FastAPI development server:
 
 ```bash
-$ python -m celery -A celery_app worker --queues=default,file_processing,data_indexing --loglevel=info
+uvicorn main:app --reload --host 0.0.0.0 --port 5000
 ```
 
-To run the **Beat scheduler**, you can run the following command in a separate terminal:
+The application will be available at:
 
-```bash
-$ python -m celery -A celery_app beat --loglevel=info
-```
+- **API:** http://localhost:5000
+- **Swagger Documentation:** http://localhost:5000/docs
+- **ReDoc:** http://localhost:5000/redoc
 
-To Run **Flower Dashboard**, you can run the following command in a separate terminal:
+---
 
-```bash
-$ python -m celery -A celery_app flower --conf=flowerconfig.py
-```
+# Future Direction
 
+## Knowledge Copilot — Agentic RAG Platform
 
-open your browser and go to `http://localhost:5555` to see the dashboard.
+The long-term goal is to evolve this project into a more advanced Agentic RAG platform called **Knowledge Copilot**.
 
-## POSTMAN Collection
+The platform will move beyond traditional RAG by introducing intelligent retrieval strategies, agent-based workflows, and improved answer reliability.
 
-Download the POSTMAN collection from [/assets/mini-rag-app.postman_collection.json](/assets/mini-rag-app.postman_collection.json)
+### Planned Architecture & Features
+
+**1. Advanced Document Retrieval**
+- Build a document-based RAG platform using FastAPI, PostgreSQL, and PgVector.
+- Support document ingestion, chunking, embedding, and retrieval across multiple documents.
+
+**2. Hybrid Search & Reranking**
+- Combine semantic vector search with keyword-based retrieval.
+- Implement result fusion to combine retrieval results.
+- Introduce reranking to improve retrieval relevance and accuracy.
+
+**3. Agentic RAG with LangGraph**
+- Build an Agentic RAG workflow using LangGraph.
+- Implement query rewriting to improve search queries.
+- Add conditional routing to determine the appropriate retrieval path.
+- Introduce evidence assessment to evaluate retrieved information.
+- Implement bounded retrieval retries when the available evidence is insufficient.
+- Generate source-grounded answers based on retrieved context.
+
+### Planned Tech Stack
+
+- Python
+- FastAPI
+- PostgreSQL
+- PgVector
+- LangChain
+- LangGraph
+- LangSmith
+- Docker
+
+---
+
+## Project Status
+
+**Current Stage:** Core RAG Implementation
+
+The project currently covers the foundational RAG pipeline, including document processing, database integration, LLM integration, semantic search, and PgVector.
+
+The next development stages will focus on advanced retrieval, hybrid search, reranking, and Agentic RAG workflows.
+
