@@ -14,7 +14,7 @@ pydantic-mongo==2.3.0
 
 # AI providers
 openai==1.75.0
-cohere==5.5.8
+cohere==5.18.0
 
 # Vector database
 qdrant-client==1.10.1

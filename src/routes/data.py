@@ -3,7 +3,7 @@ from fastapi import FastAPI, APIRouter, Depends, UploadFile, status, Request
 from fastapi.responses import JSONResponse
 import os 
 from helpers.config import get_settings, Settings
-from controllers import DataController, ProjectController, ProcessController
+from controllers import DataController, ProjectController, ProcessController, NLPController
 import aiofiles
 from models import ResponseSignal
 import logging
@@ -86,6 +86,13 @@ async def process_endpint(request:Request,project_id: int, process_request: Proc
     overlap_size=process_request.overlap_size
     do_reset=process_request.do_reset
 
+    nlp_controller=NLPController(
+        vectordb_client=request.app.vector_db_clinet,
+        embedding_client=request.app.embedding_client,
+        generation_client=request.app.generation_client,
+        template_parser=request.app.template_parser
+    )
+
     project_model=await ProjectModel.create_instance(db_client=request.app.db_client)
     project=await project_model.get_project_or_create_one(project_id=project_id)
 
@@ -131,8 +138,12 @@ async def process_endpint(request:Request,project_id: int, process_request: Proc
     chunk_model=await ChunkModel.create_instance(db_client=request.app.db_client)
     
     if do_reset==1:
+        # delete vector collection  
+        collection_name = nlp_controller.create_collection_name(project_id=project.project_id)
+        _ = await request.app.vector_db_clinet.delete_collection(collection_name=collection_name)
+        # delete chunks 
         _ = await chunk_model.delete_chunks_by_project_id(project_id=project.project_id)
-    
+              
     no_records=0
     no_files=0
 

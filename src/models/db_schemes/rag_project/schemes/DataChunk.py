@@ -10,8 +10,8 @@ class DataChunk(SQLAlchemyBase):
 
     __tablename__="chunks"
 
-    chunks_id=Column(Integer, primary_key=True, autoincrement=True)
-    chunks_uuid=Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)
+    chunk_id=Column(Integer, primary_key=True, autoincrement=True)
+    chunk_uuid=Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)
 
     chunk_text=Column(String,nullable=False)
     chunk_metadata=Column(JSONB,nullable=True)
