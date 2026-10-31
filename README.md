@@ -1,1 +1,1 @@
-# Mini RAG Course
+# RAG APP 
